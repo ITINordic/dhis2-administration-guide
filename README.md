@@ -47,7 +47,7 @@ As pertaining to hardware requirements, it is important to realise that there is
 
 
 The first step to installing DHIS2, is to install the Linux Operating System (OS), currently the recom-
-mended distribution is Ubuntu 18.04 LTS. As noted in the previous sections, for practical purposes,
+mended distribution is Ubuntu 20.04 LTS. As noted in the previous sections, for practical purposes,
 the server used in this guide has 16 GB RAM and a 320 GB SSD hard disk. To limit the footprint of
 the OS, the server edition of Ubuntu will only have a Command Line Interface after installation.
 
