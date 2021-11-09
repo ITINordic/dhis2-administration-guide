@@ -27,14 +27,12 @@ iv
 
 ## Background
 
-```
 The District Health Information Software (DHIS2) is an open source Java-based web technology, which can be sustainably, and is recommended to be, installed with other free and open source tools. Many of the industry standard implementations of DHIS2 occur within the Linux operating system, even though it can be set-up in other environments. However, in order to benefit from the community, it is highly advised to work on Linux, particularly the newest Ubuntu LTS server editions. A number of tools have been developed to support administrators to install and maintain DHIS2 on Ubuntu. This guide will provide the information that is necessary, to install, and maintain DHIS2. It is important to know that since technology evolves, these instructions will need to be updated as new techniques and versions of DHIS2 emerge. In this vein, the authors shall provide the best practices as prevailing at the time of this publication, which can provide the necessary guidelines as to configure a the leading edge set up. Besides the pre-requisite that users of this guide should know how to use the Linux command-line, there are other technologies that are required in order to successfully host DHIS2. In particular, the system uses a Postgres database, is accessed through a web proxy technology such as Apache, and is more scalably hosted within virtualised container environments, of which LXD is used in this guide. It will be important for administrators to join the community which can be effectively accessed through enrolling onto the online forum that can be found here [ https://community.dhis2.org/]. It is on the forums found at this location that administrators will be able to get support on day to day challenges experienced while hosting the system, and in addition be able to provide support in turn to others who might be facing known issues.
-```
+
 ## System Architecture and Requirements
 
-```
+
 As mentioned, DHIS2 is best run on Ubuntu LTS editions. The LTS means that the version of Ubuntu that is installed has long term support and will continue to receive patches and updates for a period, usually some years, without any need to upgrade. At the point of publishing this guide, the version which has been widely tested is Ubuntu 18.04 LTS. This is the version on which the examples provided in this guide will be tested.
-```
 
 As pertaining to hardware requirements, it is important to realise that there is no hard and fast rule as what is required to run DHIS2. As often retorted by Bob, who developed the techniques and tools used in this guide, "*asking for server specifications to reliably host your DHIS2 instance is like asking me how long a piece of string is and the answer is, 'I don't know!'*". You can understand the meaning of this statement once you realise the difference in scale for different DHIS2 set ups. Running DHIS2 configured for a hundred users, for instance, is not similar to an instance which supports 10 000 users. In addition, DHIS2 has both routine and vent and case-based modules, which determines the traffic and volume of data at different time-frames. It is important to remember that DHIS2 is run and configured on a number of Free and Open Source Software (FOSS) tools which have an impact on the minimum requirements. In particular, the Linux operating system itself can run on minimum hardware, yet the other components in combination, that is the virtualisation LXD containers, one for the proxy, preferably Apache, another container for the Postgres database, another for the DHIS2 application, and the last for system monitoring tools, will be the major determinants of the minimum hardware specifications. In addition, it is important to realise that the number of users of the system expected at any given time will form a variable scale on which the hardware required will be determined. In essence, it should always be possible to increase hardware allocated to the system as users and running instances increase, or performance bottlenecks are noted. A key element where performance issues can arise is on the database, since read and write operations from users do take time, and the number of permitted connections are limited in number. A number of parameters for optimisations, depending on hardware available should be tested until an optimal performance based on limited hardware is reached. For the sake of this guide, we will provide examples based on a server with 16 GB on RAM, 6 CPU Cores, and a 320 GB SSD Hard Disk. The system will be set up in accordance with the architecture in the figure below.
 
@@ -47,12 +45,12 @@ As pertaining to hardware requirements, it is important to realise that there is
 
 ## Overview
 
-```
+
 The first step to installing DHIS2, is to install the Linux Operating System (OS), currently the recom-
 mended distribution is Ubuntu 18.04 LTS. As noted in the previous sections, for practical purposes,
 the server used in this guide has 16 GB RAM and a 320 GB SSD hard disk. To limit the footprint of
 the OS, the server edition of Ubuntu will only have a Command Line Interface after installation.
-```
+
 #### Creating Users
 
 
