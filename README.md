@@ -354,7 +354,7 @@ sudo ufw enable
 ```
 sudo ufw status
 ```
-Having confirmed that the Firewall is indeed enabled, it will be important to ensure that the IP address of the server is assigned a domain name. It will not be possible to set up a security certificate on the domain without the name. For this, you would need to contact the owner of your organisations domain so they can assign the IP address. The process can be immediate or, in some cases, take up to a few hours. For our case, we give the domain name a value such as ' dhis.moh.gov.zm ' will be asigned to the IP address of the server, which is for our case, 139.162.170.134.
+Having confirmed that the Firewall is indeed enabled, it will be important to ensure that the IP address of the server is assigned a domain name. It will not be possible to set up a security certificate on the domain without the name. For this, you would need to contact the owner of your organisations domain so they can assign the IP address. The process can be immediate or, in some cases, take up to a few hours. For our case, we give the domain name a value such as ' dhis.moh.xxx.zz ' will be asigned to the IP address of the server, which is for our case, 139.162.170.134.
 
 It will be important for the set up, to configure the time zone. In order to get the list of available timezones, there is need to run the instruction below:
 ```
@@ -416,8 +416,8 @@ Once opened, the sample file will look as below:
 ```
 It will be important to edit the top 3 lines to reflect the configuration of your server. In our case, the testing values will now look as below:
 ```
-"fqdn":"dhis.moh.gov.zm",
-"email": "dhisadmin@moh.gov.zm",
+"fqdn":"dhis.moh.xxx.zz",
+"email": "dhisadmin@moh.xxx.zz",
 "environment": {
     "ZM": "Africa/Lusaka"
 },
@@ -444,7 +444,7 @@ sudo ./create_containers.sh
 ```
 
 Once the instruction above runs to completion, a good way to test will be to navigate to the URL that
-was set in the settings file, that is ' _dhis.moh.gov.zm_ '. The page below should be seen:
+was set in the settings file, that is ' _dhis.moh.xxx.zz_ '. The page below should be seen:
 
 **Figure 3.1. Apache Proxy Home Page**
 
@@ -579,7 +579,7 @@ command:
 ```
 dhis2-deploy-war -l https://releases.dhis2.org/2.33/2.33.3/dhis.war hmis
 ```
-At this point, if the installation was successful, DHIS2 would be accessible at our URL, from the browser, which in our case would be ' _dhis.moh.gov.zm/hmis_ '. The same can be done for our ' _tracker_ ' container by running the following:
+At this point, if the installation was successful, DHIS2 would be accessible at our URL, from the browser, which in our case would be ' _dhis.moh.xxx.zz/hmis_ '. The same can be done for our ' _tracker_ ' container by running the following:
 ```
 dhis2-deploy-war -l https://releases.dhis2.org/2.33/2.33.3/dhis.war tracker
 ```
@@ -831,15 +831,15 @@ In general, the settings in this file are sensitive and should not be changed. H
 
 **Apache Proxy Container Configuration**
 
-All incoming connections to your DHIS2 instances from outside, will come through the Apache Proxy. This was installed by deafult when the initial setup was done earlier. In our case, when using a web browser, we can access the HMIS instance of DHIS2 by going to our example URL of ' dhis.moh.gov.zm/hmis ', or our Tracker instance by navigating to ' dhis.moh.gov.zm/tracker ', or our monitoring software by navigating to ' dhis.moh.gov.zm/munin '. These pages are accessed through the ' proxy' container, which uses Apache Reverse Proxy to also serve the results back to the browser. In addition, the security certificate that allows for encrypted traffic has also been set up on this container. In our case, we have used a free certificate from an open authority called ' Let's Encrypt '. Using this certificate, all traffic to and from the server will have a root of 'https', meaning it is safe for the transmission of user names and other secure information like passwords, which will be encrypted.
+All incoming connections to your DHIS2 instances from outside, will come through the Apache Proxy. This was installed by deafult when the initial setup was done earlier. In our case, when using a web browser, we can access the HMIS instance of DHIS2 by going to our example URL of ' dhis.moh.xxx.zz/hmis ', or our Tracker instance by navigating to ' dhis.moh.xxx.zz/tracker ', or our monitoring software by navigating to ' dhis.moh.xxx.zz/munin '. These pages are accessed through the ' proxy' container, which uses Apache Reverse Proxy to also serve the results back to the browser. In addition, the security certificate that allows for encrypted traffic has also been set up on this container. In our case, we have used a free certificate from an open authority called ' Let's Encrypt '. Using this certificate, all traffic to and from the server will have a root of 'https', meaning it is safe for the transmission of user names and other secure information like passwords, which will be encrypted.
 
-As it is, if a user types the example URL ' dhis.moh.gov.zm ', they would arrive at the Apache landing page shown in the earlier figure. A decision must therefore be made on whether to redirect this URL to a default DHIS2 instance, or to create a new custom landing page. This is a simple HTML page, that can be created externally and then uploaded to the ' proxy ' container.
+As it is, if a user types the example URL ' dhis.moh.xxx.zz ', they would arrive at the Apache landing page shown in the earlier figure. A decision must therefore be made on whether to redirect this URL to a default DHIS2 instance, or to create a new custom landing page. This is a simple HTML page, that can be created externally and then uploaded to the ' proxy ' container.
 
 **Creating a Custom Landing Page**
 
 If we use a desktop application to create a custom HTML landing page, for instance we call it ' customindex.html ', and it is in the current folder in our terminal client. We would need to ensure we are not on the host server, and are on the local machine. To copy the file to the server, we would use the secure copy client (SCP). The command to run for copying the index page to the host would be (where ' bob ' is our example user from before):
 ```
-scp -i location_of_your_private_key_file -P 2277 customindex.html bob@dhis.moh.gov.zm:/home/bob/customindex.html
+scp -i location_of_your_private_key_file -P 2277 customindex.html bob@dhis.moh.xxx.zz:/home/bob/customindex.html
 ```
 The command above would copy the created custom page onto the host. Using commands from before, you can now log back onto the host. Having logged back onto the host, it will be important to copy the created custom page onto the ' proxy ' container. To do this, the following LXC command can be run:
 
@@ -848,7 +848,7 @@ sudo lxc file push customindex.html proxy/var/lib/www/html/index.html
 ```
 **Redirecting to a Default DHIS2 Instance**
 
-On the other hand, instead of having a custom landing page, a decision could be made to redirect all requests made to the index page, for example when ' dhis.moh.gov.zm ' is typed in the browser, the user would be automatically redirected to the main HMIS instance at ' dhis.moh.gov.zm/hmis '. In this case,
+On the other hand, instead of having a custom landing page, a decision could be made to redirect all requests made to the index page, for example when ' dhis.moh.xxx.zz ' is typed in the browser, the user would be automatically redirected to the main HMIS instance at ' dhis.moh.xxx.zz/hmis '. In this case,
 there is a need to edit the main Apache Proxy virtual host file. To open the file, there are two options, option 1: log in to the proxy container from the host as shown below:
 ```
 sudo lxc exec proxy bash
@@ -900,4 +900,4 @@ For example, in our case, to moitor the ' hmis ' instance, we would run:
 ```
 sudo dhis2-tomcat-munin hmis proxy
 ```
-To access the console, you would need to go to our example URL at 'https://dhis.moh.gov.zm/munin' or rather '<_server_name_>/_munin_' where the '_server_name_' is the home of your server.
+To access the console, you would need to go to our example URL at 'https://dhis.moh.xxx.zz/munin' or rather '<_server_name_>/_munin_' where the '_server_name_' is the home of your server.
