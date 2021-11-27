@@ -912,7 +912,27 @@ For example to restore the *dhis* container from the *snap0* snapshot you presum
 lxc restore dhis snap0
 ```
 
+***Scheduling auto snapshot creation and expiry
 
+*TODO
 
+***Exporting LXC containers 
+
+Snapshots are useful in a backup strategy, however this  does not save you from something bad happening to your LXD host. If the host drive gets corrupted, then snapshots will not help you recover your containers. In this case, there is a need to export the container into a known file system,  save it on an external storage medium or ship it to another server, eg for remote/off-site backups. 
+
+Shut down the container
+
+```
+lxc stop <container>
+```
+
+Export the container
+```
+lxc export <container> <storage name>
+```
+E.g
+```
+lxc export dhis /tank/backups/dhis0.tar.gz
+```
 
 
