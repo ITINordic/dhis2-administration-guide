@@ -4,7 +4,26 @@
 
 
 ## Table of Contents
-
+- 1. Introduction..............................................................................................................
+   - Background..........................................................................................................
+   - System Architecture and Requirements.....................................................................
+- 2. Setting Up and Securing the DHIS2 Server....................................................................
+   - Overview.............................................................................................................
+   - Creating Users......................................................................................................
+- 3. Installing DHIS2......................................................................................................
+   - Overview...........................................................................................................
+   - Preparing to Set Up DHIS2...................................................................................
+   - How to Set Up DHIS2.........................................................................................
+      - Installing DHIS2 Instances............................................................................
+- 4. DHIS2 Administration..............................................................................................
+   - Overview...........................................................................................................
+   - Useful LXC Commands........................................................................................
+   - Access and Configuration of Containers..................................................................
+      - Commands for Logging into Containers..........................................................
+      - Optimisation of the Postgres Database Container...............................................
+      - DHIS2 Instance Container Admin Tasks
+      - Apache Proxy Container Configuration...........................................................
+      - Munin Monitoring Container.........................................................................
 
 **List of Figures**
 
@@ -169,10 +188,12 @@ UsePAM no
 ```
 PermitRootLogin no
 ```
-- Fing the SSH port and change it to a preffered value from the default which is 22, for example uncomment and change to 2277 as below:
+- Fing the SSH port and change it to a preffered value from the default which is 22, for example uncomment and change to 877 as below:
 ```
-Port 2277
+Port 877
 ```
+***Note: You should never set the sshd port to something over 1024.
+
 - Find PubkeyAuthentication and set to yes
 
 ```
@@ -190,56 +211,11 @@ everything is as it should be it should be possible to log back in using SSH usi
 as the one below. It is at this point that you would use the private key to access the server, and will
 not be prompted for a password.
 ```
-ssh -i /your_private_key_file_location bob@139.162.170.134 -p 2277
+ssh -i /your_private_key_file_location bob@139.162.170.134 -p 877
 ```
 
 # Part II. The DHIS2 Environment
 
-
-## Table of Contents
-
-- I. The Hosting Environment............................................................................................
-   - 1. Introduction......................................................................................................
-      - Background..................................................................................................
-      - System Architecture and Requirements.............................................................
-   - 2. Setting Up and Securing the DHIS2 Server............................................................
-      - Overview.....................................................................................................
-      - Creating Users..............................................................................................
-- II. The DHIS2 Environment............................................................................................
-   - 3. Installing DHIS2..............................................................................................
-      - Overview...................................................................................................
-      - Preparing to Set Up DHIS2...........................................................................
-      - How to Set Up DHIS2.................................................................................
-         - Installing DHIS2 Instances....................................................................
-   - 4. DHIS2 Administration......................................................................................
-      - Overview...................................................................................................
-      - Useful LXC Commands................................................................................
-      - Access and Configuration of Containers..........................................................
-         - Commands for Logging into Containers..................................................
-         - Optimisation of the Postgres Database Container.......................................
-         - DHIS2 Instance Container Admin Tasks
-         - Apache Proxy Container Configuration....................................................
-         - Munin Monitoring Container.................................................................
-- 1. Introduction..............................................................................................................
-   - Background..........................................................................................................
-   - System Architecture and Requirements.....................................................................
-- 2. Setting Up and Securing the DHIS2 Server....................................................................
-   - Overview.............................................................................................................
-   - Creating Users......................................................................................................
-- 3. Installing DHIS2......................................................................................................
-   - Overview...........................................................................................................
-   - Preparing to Set Up DHIS2...................................................................................
-   - How to Set Up DHIS2.........................................................................................
-      - Installing DHIS2 Instances............................................................................
-- 4. DHIS2 Administration..............................................................................................
-   - Overview...........................................................................................................
-   - Useful LXC Commands........................................................................................
-   - Access and Configuration of Containers..................................................................
-      - Commands for Logging into Containers..........................................................
-      - Optimisation of the Postgres Database Container...............................................
-      - DHIS2 Instance Container Admin Tasks
-      - Apache Proxy Container Configuration...........................................................
-      - Munin Monitoring Container.........................................................................
 
 # Chapter 3. Configuring Linux Containers
 
@@ -315,7 +291,7 @@ sudo lxc list
 ```
 
 
-# Chapter 3. Installing DHIS
+# Chapter 4. Installing DHIS
 
 ### Overview
 
@@ -342,9 +318,9 @@ sudo ufw allow http
 ```
 sudo ufw allow https
 ```
-- Earlier on, we changed the SSH connection port from 22 to 2277, we should open this port as well so we can be able to connect to the server once the Firewall is enabled
+- Earlier on, we changed the SSH connection port from 22 to 877, we should open this port as well so we can be able to connect to the server once the Firewall is enabled
 ```
-sudo ufw allow 2277
+sudo ufw allow 877
 ```
 - It is now time to enable the Firewall with the following command
 ```
@@ -446,7 +422,7 @@ sudo ./create_containers.sh
 Once the instruction above runs to completion, a good way to test will be to navigate to the URL that
 was set in the settings file, that is ' _dhis.moh.xxx.zz_ '. The page below should be seen:
 
-**Figure 3.1. Apache Proxy Home Page**
+**Figure 4.1. Apache Proxy Home Page**
 
 At this point, all the containers necessary to install an instance of DHIS2 as shown in the architecture here, are now in place. To see the list of available containers, you can run the following command on your host server:
 ```
@@ -572,7 +548,7 @@ As can be seen, two additional containers have been created to host the DHIS2 in
 web archive, ' _WAR_ ' file as shown in the image below. In this case we are getting the URL to the latest
 DHIS2 version at the time of developing this manual, which was 2.33.3.
 
-**Figure 3.2. Selecting the DHIS2 Version to Install**
+**Figure 4.2. Selecting the DHIS2 Version to Install**
 
 To deploy the WAR file selected in the above image to the 'hmis' container we would run the following
 command:
@@ -586,7 +562,7 @@ dhis2-deploy-war -l https://releases.dhis2.org/2.33/2.33.3/dhis.war tracker
 VOILA! You have now successfully installed DHIS2. However, installing DHIS2 is only the first part of hosting the system. In the next chapter, we will go through some of the ways in which this environment can be maintained in a production set up.
 
 
-# Chapter 4. DHIS2 Administration
+# Chapter 5. DHIS2 Administration
 
 ### Overview
 
@@ -839,7 +815,7 @@ As it is, if a user types the example URL ' dhis.moh.xxx.zz ', they would arrive
 
 If we use a desktop application to create a custom HTML landing page, for instance we call it ' customindex.html ', and it is in the current folder in our terminal client. We would need to ensure we are not on the host server, and are on the local machine. To copy the file to the server, we would use the secure copy client (SCP). The command to run for copying the index page to the host would be (where ' bob ' is our example user from before):
 ```
-scp -i location_of_your_private_key_file -P 2277 customindex.html bob@dhis.moh.xxx.zz:/home/bob/customindex.html
+scp -i location_of_your_private_key_file -P 877 customindex.html bob@dhis.moh.xxx.zz:/home/bob/customindex.html
 ```
 The command above would copy the created custom page onto the host. Using commands from before, you can now log back onto the host. Having logged back onto the host, it will be important to copy the created custom page onto the ' proxy ' container. To do this, the following LXC command can be run:
 
@@ -901,3 +877,42 @@ For example, in our case, to moitor the ' hmis ' instance, we would run:
 sudo dhis2-tomcat-munin hmis proxy
 ```
 To access the console, you would need to go to our example URL at 'https://dhis.moh.xxx.zz/munin' or rather '<_server_name_>/_munin_' where the '_server_name_' is the home of your server.
+
+# Part III. Backup and Disaster Recovery
+
+# Chapter 6. Backups
+
+***LXD snapshots
+
+To backup, you can take snapshots of the LXD containers. A snapshot is a 'picture' of the state of a container at the time it was taken, including its file systems. To take a snapshot of a container, you simply run the following command, for instance taking the snapshot of the *dhis* containter we would run:
+```
+lxc snapshot <container>
+```
+For example
+```
+lxc snapshot dhis
+```
+When this is run, a snapshot of the container is created with a given name of snapX where X is an incrementing number, e.g snap0.
+
+Preferrably, you might want to give your snapshot a specific name, not the default *snapX* above. In that case you would need to specify the name of the snapshot as shown below:
+```
+lxc snapshot <container> <snapshot name>
+```
+For example to create a snapshot called *dhistest* I would run
+```
+lxc snapshot dhis dhistest
+```
+To restore a snapshot of the container you run
+```
+lxc restore <container> <snapshot name>
+```
+For example to restore the *dhis* container from the *snap0* snapshot you presumably created from a previous step you would run
+
+```
+lxc restore dhis snap0
+```
+
+
+
+
+
