@@ -884,12 +884,40 @@ To access the console, you would need to go to our example URL at 'https://dhis.
 
 ***Database copy
 
+First, enter the postgres container
+```
+lxc exec postgres bash
+```
+
 You perform the backup by running the following command, which also places the file in the ```tmp``` folder
 ```
 pg_dump -O -Fp name_of_db -T aggregated* -T analytics_* -T completeness* | gzip > /tmp/name_of_output_file.gz
 ```
-Exit the container, and pull the file
+Exit the container, and pull the file (copy) using the command
+```
+lxc file pull postgres/tmp/name_of_output_file.gz /tmp/name_of_output_file.gz
+```
 
+Exit the host, and copy from the server to your local machine
+```
+scp -P port_number url_of_source_server:/tmp/name_of_output_file.gz local_file_location/name_of_output_file.gz
+```
+Copy from your local machine to the destination
+```
+scp -P port_number local_file_location/name_of_output_file.gz bob@url_of_destination_server:/tmp/name_of_output_file.gz
+```
+Access the machine where the databse was copied to, and stop the container running the instance whose databse you want to restore e.g.
+```
+lxc stop name_of_instance
+```
+Run the command from the dhis2 tools to restore the database:
+```
+sudo dhis2-restoredb /tmp/name_of_output_file.gz name_of_instance
+```
+Restart the container when it is done
+```
+lxc start name_of_instance
+```
 
 ***LXD snapshots
 
