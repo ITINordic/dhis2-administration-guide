@@ -884,11 +884,13 @@ To access the console, you would need to go to our example URL at 'https://dhis.
 
 ***Database copy
 
-To backup - enter the postgres container and access postgres using the following commands
+You perform the backup by running the following command, which also places the file in the ```tmp``` folder
 ```
-psql name_of_db
-pg_dump -O -Fp name_of_db -T aggregated* -T analytics_* -T completeness* | gzip > name_of_output_file.gz
+pg_dump -O -Fp name_of_db -T aggregated* -T analytics_* -T completeness* | gzip > /tmp/name_of_output_file.gz
 ```
+Exit the container, and pull the file
+
+
 ***LXD snapshots
 
 To backup, you can take snapshots of the LXD containers. A snapshot is a 'picture' of the state of a container at the time it was taken, including its file systems. To take a snapshot of a container, you simply run the following command, for instance taking the snapshot of the *dhis* containter we would run:
